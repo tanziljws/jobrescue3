@@ -9,6 +9,7 @@ use App\Models\JobApplication;
 use App\Models\JobCategory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
@@ -25,7 +26,7 @@ class DashboardController extends Controller
         $stats = [
             'total_jobs' => $user->employerJobs()->count(),
             'active_jobs' => $user->employerJobs()->active()->count(),
-            'pending_jobs' => $user->employerJobs()->pending()->count(),
+            'completed_jobs' => $user->employerJobs()->where('status', 'completed')->count(),
             'total_applications' => JobApplication::whereHas('job', function ($query) use ($user) {
                 $query->where('employer_id', $user->id);
             })->count(),
@@ -97,10 +98,10 @@ class DashboardController extends Controller
             'requirements' => $request->requirements,
             'skills_required' => $request->skills_required,
             'is_urgent' => $request->boolean('is_urgent'),
-            'status' => 'pending', // Needs admin approval
+            'status' => 'active', // Directly active without admin approval
         ]);
 
-        return redirect()->route('employer.jobs')->with('success', 'Lowongan berhasil dibuat dan menunggu persetujuan admin.');
+        return redirect()->route('employer.jobs')->with('success', 'Lowongan berhasil dibuat dan sudah aktif!');
     }
 
     public function applications($jobId = null)
@@ -137,11 +138,12 @@ class DashboardController extends Controller
             'city' => 'required|string|max:100',
             'district' => 'nullable|string|max:100',
             'subdistrict' => 'nullable|string|max:100',
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $user = Auth::user();
         
-        $user->update([
+        $updateData = [
             'name' => $request->name,
             'phone' => $request->phone,
             'bio' => $request->bio,
@@ -149,7 +151,21 @@ class DashboardController extends Controller
             'city' => $request->city,
             'district' => $request->district,
             'subdistrict' => $request->subdistrict,
-        ]);
+        ];
+
+        // Handle profile photo upload
+        if ($request->hasFile('profile_photo')) {
+            // Delete old photo if exists
+            if ($user->profile_photo) {
+                Storage::disk('public')->delete($user->profile_photo);
+            }
+            
+            // Store new photo
+            $path = $request->file('profile_photo')->store('profile-photos', 'public');
+            $updateData['profile_photo'] = $path;
+        }
+        
+        $user->update($updateData);
 
         return redirect()->route('employer.profile')->with('success', 'Profil berhasil diperbarui!');
     }

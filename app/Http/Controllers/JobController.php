@@ -135,4 +135,31 @@ class JobController extends Controller
             'message' => 'Status lamaran berhasil diperbarui.'
         ]);
     }
+
+    public function category(JobCategory $category, Request $request)
+    {
+        $query = Job::active()
+            ->where('category_id', $category->id)
+            ->with(['category', 'employer']);
+
+        // Job type filter
+        if ($request->filled('job_type')) {
+            $query->where('job_type', $request->job_type);
+        }
+
+        // Location filter
+        if ($request->filled('location')) {
+            $query->where('location', 'like', "%{$request->location}%");
+        }
+
+        // Budget filter
+        if ($request->filled('budget')) {
+            [$min, $max] = explode('-', $request->budget);
+            $query->whereBetween('budget_min', [(int)$min, (int)$max]);
+        }
+
+        $jobs = $query->latest()->paginate(12);
+
+        return view('jobs.category', compact('category', 'jobs'));
+    }
 }

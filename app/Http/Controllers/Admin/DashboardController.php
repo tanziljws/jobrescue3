@@ -9,6 +9,9 @@ use App\Models\Job;
 use App\Models\JobCategory;
 use App\Models\Report;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class DashboardController extends Controller
 {
@@ -90,6 +93,23 @@ class DashboardController extends Controller
         return view('admin.categories', compact('categories'));
     }
 
+    public function storeCategory(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:job_categories,name',
+            'description' => 'nullable|string|max:500',
+        ]);
+
+        // Generate slug from name
+        $validated['slug'] = Str::slug($validated['name']);
+        $validated['is_active'] = true;
+        $validated['icon'] = '📁'; // Default icon
+
+        JobCategory::create($validated);
+
+        return redirect()->route('admin.categories')->with('success', 'Kategori berhasil ditambahkan.');
+    }
+
     public function reports()
     {
         $reports = Report::with(['reporter', 'reportedUser', 'reportedJob'])
@@ -116,6 +136,10 @@ class DashboardController extends Controller
         ]);
 
         if ($request->hasFile('avatar')) {
+            // Delete old photo if exists
+            if ($user->profile_photo) {
+                Storage::disk('public')->delete($user->profile_photo);
+            }
             $path = $request->file('avatar')->store('avatars', 'public');
             // save into profile_photo column to match User fillable
             $validated['profile_photo'] = $path;
@@ -140,5 +164,48 @@ class DashboardController extends Controller
 
         $user->update(['password' => \Hash::make($request->password)]);
         return redirect()->route('admin.profile')->with('success', 'Password berhasil diperbarui.');
+    }
+
+    public function adminDeleteJob(Job $job)
+    {
+        $user = Auth::user();
+        if (!$user || $user->role !== 'admin') {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        // If Job uses soft deletes, this will soft delete; otherwise hard delete
+        $job->delete();
+
+        if (request()->wantsJson()) {
+            return response()->json(['success' => true]);
+        }
+
+        return back()->with('success', 'Lowongan berhasil dihapus.');
+    }
+
+    public function adminDeleteUser(User $user)
+    {
+        $admin = Auth::user();
+        if (!$admin || $admin->role !== 'admin') {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        // Prevent self-deletion to avoid locking out admin
+        if ($user->id === $admin->id) {
+            return back()->withErrors(['user' => 'Tidak dapat menghapus akun Anda sendiri.']);
+        }
+
+        // Delete profile photo if exists
+        if ($user->profile_photo) {
+            Storage::disk('public')->delete($user->profile_photo);
+        }
+
+        $user->delete();
+
+        if (request()->wantsJson()) {
+            return response()->json(['success' => true]);
+        }
+
+        return back()->with('success', 'Pengguna berhasil dihapus.');
     }
 }

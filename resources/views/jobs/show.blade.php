@@ -5,43 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $job->title }} - Job Rescue</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+      *{margin:0;padding:0;box-sizing:border-box}
+      body{font-family:'Poppins',sans-serif;background:#f8fafc}
+      .header{position:sticky;top:0;z-index:1000;background:rgba(255,255,255,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,.08);box-shadow:0 4px 20px rgba(0,0,0,.08)}
+      .nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;max-width:1200px;margin:0 auto}
+      .nav-brand{display:flex;align-items:center;gap:.5rem}
+      .logo{width:50px;height:50px;background:linear-gradient(135deg,#f97316,#ea580c);border-radius:15px;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(249,115,22,.4)}
+      .logo img{width:36px;height:36px;filter:brightness(0) invert(1)}
+      .brand-text{font-size:1.8rem;font-weight:800;color:#1f2937}
+      .nav-menu{display:flex;list-style:none;gap:.25rem;align-items:center;background:rgba(249,115,22,.05);padding:.4rem;border-radius:50px;border:1px solid rgba(249,115,22,.1)}
+      .nav-link{color:#4b5563;text-decoration:none;font-weight:500;padding:.65rem 1.25rem;border-radius:25px;transition:all .3s;font-size:.9rem}
+      .nav-link:hover{color:#f97316}
+      .nav-link.active{color:#ffffff;background:linear-gradient(135deg,#f97316,#ea580c);font-weight:600}
+      .btn-register{background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border:none;padding:.8rem 2rem;border-radius:25px;font-weight:600;box-shadow:0 8px 25px rgba(249,115,22,.3);text-decoration:none}
+      .user-menu{position:relative}
+      .user-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#f97316,#ea580c);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(249,115,22,.3)}
+      .user-dropdown{position:absolute;top:calc(100% + 10px);right:0;background:#fff;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.12);min-width:180px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .3s;border:1px solid rgba(0,0,0,.06)}
+      .user-menu:hover .user-dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+      .user-dropdown a,.user-dropdown button{display:block;width:100%;padding:.75rem 1.25rem;text-decoration:none;color:#374151;font-weight:500;transition:all .2s;border:none;background:none;text-align:left;cursor:pointer;font-family:'Poppins',sans-serif;font-size:.9rem}
+      .user-dropdown a:hover,.user-dropdown button:hover{background:#f8fafc;color:#f97316}
+      .user-dropdown button{border-top:1px solid rgba(0,0,0,.06);border-radius:0 0 12px 12px}
+    </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-lg sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <a href="{{ route('home') }}" class="flex items-center">
-                        <span class="text-2xl mr-2">🚀</span>
-                        <span class="text-xl font-bold text-gray-800">JobRescue</span>
-                    </a>
-                </div>
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="{{ route('home') }}" class="text-gray-600 hover:text-orange-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">Beranda</a>
-                        <a href="{{ route('jobs.index') }}" class="text-gray-600 hover:text-orange-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">Cari Kerja</a>
-                        @auth
-                            @if(Auth::user()->role === 'worker')
-                                <a href="{{ route('worker.dashboard') }}" class="text-gray-600 hover:text-orange-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">Dashboard</a>
-                            @elseif(Auth::user()->role === 'employer')
-                                <a href="{{ route('employer.dashboard') }}" class="text-gray-600 hover:text-orange-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">Dashboard</a>
-                            @elseif(Auth::user()->role === 'admin')
-                                <a href="{{ route('admin.dashboard') }}" class="text-gray-600 hover:text-orange-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">Admin</a>
-                            @endif
-                            <form method="POST" action="{{ route('logout') }}" class="inline">
-                                @csrf
-                                <button type="submit" class="text-gray-600 hover:text-orange-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">Logout</button>
-                            </form>
-                        @else
-                            <a href="{{ route('login') }}" class="text-gray-600 hover:text-orange-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">Login</a>
-                            <a href="{{ route('register') }}" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">Daftar</a>
-                        @endauth
-                    </div>
-                </div>
-            </div>
+    <!-- Header (matching Cari Talent) -->
+    <header class="header">
+      <nav class="nav">
+        <div class="nav-brand">
+          <div class="logo">
+            <img src="{{ asset('img/icon.svg') }}" alt="Logo JobRescue">
+          </div>
+          <span class="brand-text">JobRescue</span>
         </div>
-    </nav>
+        <ul class="nav-menu">
+          <li><a href="{{ route('home') }}" class="nav-link">Beranda</a></li>
+          <li><a href="{{ route('jobs.index') }}" class="nav-link active">Cari Kerja</a></li>
+          <li><a href="{{ route('talents.index') }}" class="nav-link">Cari Talent</a></li>
+          <li><a href="{{ route('about') }}" class="nav-link">Tentang</a></li>
+          @auth
+            @if(Auth::user()->role === 'admin')
+              <li><a href="{{ route('admin.dashboard') }}" class="nav-link">Admin</a></li>
+            @endif
+          @endauth
+          @guest
+            <li><a href="{{ route('login') }}" class="nav-link">Login</a></li>
+          @endguest
+        </ul>
+        @guest
+          <a href="{{ route('register') }}" class="btn-register">Daftar</a>
+        @else
+          <div class="user-menu">
+            <div class="user-avatar" style="overflow:hidden;">
+              @php($pp = Auth::user()->profile_photo ?? null)
+              @if($pp)
+                <img src="{{ asset('storage/'.$pp) }}" alt="{{ Auth::user()->name }}" style="width:100%;height:100%;object-fit:cover;border-radius:9999px;display:block;">
+              @else
+                <span>{{ substr(Auth::user()->name, 0, 1) }}</span>
+              @endif
+            </div>
+            <div class="user-dropdown">
+              @if(Auth::user()->role === 'worker')
+                <a href="{{ route('worker.dashboard') }}">Dashboard</a>
+              @elseif(Auth::user()->role === 'employer')
+                <a href="{{ route('employer.dashboard') }}">Dashboard</a>
+                <a href="{{ route('employer.jobs.create') }}">Buat Lowongan</a>
+              @endif
+              <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit">Logout</button>
+              </form>
+            </div>
+          </div>
+        @endguest
+      </nav>
+    </header>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Breadcrumb -->

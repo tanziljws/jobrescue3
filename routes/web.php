@@ -13,10 +13,15 @@ use App\Http\Controllers\ReportController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index');
 Route::get('/jobs/{job}', [JobController::class, 'show'])->name('jobs.show');
+Route::get('/category/{category:slug}', [JobController::class, 'category'])->name('jobs.category');
 // Public: Cari Talent
 Route::get('/talents', function () {
     return view('talents.index');
 })->name('talents.index');
+// Public: About
+Route::view('/about', 'about')->name('about');
+// Public: Pricing
+Route::view('/pricing', 'pricing')->name('pricing');
 
 // Authentication routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -24,6 +29,21 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::get('/register', [LoginController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [LoginController::class, 'register']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+// Password reset routes
+Route::get('/forgot-password', function () {
+    return view('auth.forgot-password');
+})->middleware('guest')->name('password.request');
+
+Route::post('/forgot-password', [LoginController::class, 'sendResetLinkEmail'])
+    ->middleware('guest')->name('password.email');
+
+Route::get('/reset-password/{token}', function (string $token) {
+    return view('auth.reset-password', ['token' => $token]);
+})->middleware('guest')->name('password.reset');
+
+Route::post('/reset-password', [LoginController::class, 'resetPassword'])
+    ->middleware('guest')->name('password.store');
 
 // Job application routes
 Route::middleware('auth')->group(function () {
@@ -43,8 +63,13 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/users', [DashboardController::class, 'users'])->name('users');
     Route::get('/jobs', [DashboardController::class, 'jobs'])->name('jobs');
     Route::get('/categories', [DashboardController::class, 'categories'])->name('categories');
+    Route::post('/categories', [DashboardController::class, 'storeCategory'])->name('categories.store');
     Route::get('/reports', [DashboardController::class, 'reports'])->name('reports');
     Route::patch('/reports/{report}/status', [ReportController::class, 'updateStatus'])->name('reports.update-status');
+    // Admin: delete any job
+    Route::delete('/jobs/{job}', [DashboardController::class, 'adminDeleteJob'])->name('jobs.delete');
+    // Admin: delete user
+    Route::delete('/users/{user}', [DashboardController::class, 'adminDeleteUser'])->name('users.destroy');
     // Admin profile
     Route::get('/profile', [DashboardController::class, 'profile'])->name('profile');
     Route::patch('/profile', [DashboardController::class, 'updateProfile'])->name('profile.update');

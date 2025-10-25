@@ -4,56 +4,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Job Rescue</title>
+    <link rel="icon" type="image/svg" href="{{ asset('img/favicon.svg') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
-        .admin-sidebar .sidebar-icon { color: #fff; transition: color .2s ease; }
-        .admin-nav a:hover .sidebar-icon, .admin-nav a.active .sidebar-icon { color: #f97316; }
-        .admin-nav a.active { background: rgba(249, 115, 22, 0.18) !important; color: #fff; }
+        body { font-family: 'Poppins', sans-serif; }
+        /* Reserve space for fixed sidebar on large screens */
+        @media (min-width: 1024px) {
+            .admin-has-fixed-sidebar { padding-left: 16rem; }
+        }
+        .admin-sidebar .sidebar-icon { color: rgba(249,115,22,0.7); transition: color .2s ease; }
+        /* Unified sidebar link styling */
+        .sidebar-link { display:flex; align-items:center; gap:.5rem; color:#eef2ff; padding:.75rem .85rem; border-radius:12px; transition: all .2s ease; }
+        .sidebar-link:hover { background: rgba(255,255,255,.12); color:#fff; }
+        .sidebar-link.active { background: rgba(255,255,255,.22); color:#fff; }
+        .sidebar-link:hover .sidebar-icon { color:#f97316; }
+        .sidebar-link.active .sidebar-icon { color:#f97316; }
         .admin-nav a.active span { color: #fff; }
+        /* Orange transparent metric card */
+        .metric-card {
+            background: rgba(249,115,22,.12);
+            border: 2px solid rgba(249,115,22,.25);
+            box-shadow: 0 10px 30px rgba(249,115,22,.10);
+        }
     </style>
 </head>
-<body class="bg-gray-50">
-    <div class="flex h-screen">
+<body class="bg-gray-50 admin-has-fixed-sidebar">
+    <div class="flex min-h-screen">
         <!-- Sidebar -->
-        <div class="bg-[#667eea] text-white w-64 min-h-screen p-4 admin-sidebar" style="background-color:#667eea;">
+        <div class="bg-[#667eea] text-white w-64 h-screen fixed top-0 left-0 bottom-0 p-4 admin-sidebar overflow-y-auto" style="background-color:#667eea;">
             <div class="flex items-center mb-8">
                 <img src="{{ asset('img/icon.svg') }}" alt="JobRescue" class="w-6 h-6 mr-2" style="width:24px;height:24px;">
                 <span class="text-xl font-bold">JobRescue Admin</span>
             </div>
             
             <nav class="space-y-2 admin-nav">
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center space-x-2 text-white p-3 rounded-lg {{ request()->routeIs('admin.dashboard') ? 'active' : 'hover:bg-white/10' }}">
+                <a href="{{ route('admin.dashboard') }}" class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                     <i class="fa-solid fa-chart-line sidebar-icon"></i>
                     <span>Dashboard</span>
                 </a>
-                <a href="{{ route('admin.users') }}" class="flex items-center space-x-2 text-white/90 hover:bg-white/10 hover:text-white p-3 rounded-lg transition-colors {{ request()->routeIs('admin.users') ? 'active' : '' }}">
+                <a href="{{ route('admin.users') }}" class="sidebar-link {{ request()->routeIs('admin.users') ? 'active' : '' }}">
                     <i class="fa-solid fa-users sidebar-icon"></i>
                     <span>Manajemen Pengguna</span>
                 </a>
-                <a href="{{ route('admin.jobs') }}" class="flex items-center space-x-2 text-white/90 hover:bg-white/10 hover:text-white p-3 rounded-lg transition-colors {{ request()->routeIs('admin.jobs') ? 'active' : '' }}">
+                <a href="{{ route('admin.jobs') }}" class="sidebar-link {{ request()->routeIs('admin.jobs') ? 'active' : '' }}">
                     <i class="fa-solid fa-briefcase sidebar-icon"></i>
                     <span>Manajemen Lowongan</span>
                 </a>
-                <a href="{{ route('admin.categories') }}" class="flex items-center space-x-2 text-white/90 hover:bg-white/10 hover:text-white p-3 rounded-lg transition-colors {{ request()->routeIs('admin.categories') ? 'active' : '' }}">
+                <a href="{{ route('admin.categories') }}" class="sidebar-link {{ request()->routeIs('admin.categories') ? 'active' : '' }}">
                     <i class="fa-solid fa-folder sidebar-icon"></i>
                     <span>Kategori Pekerjaan</span>
                 </a>
-                <a href="{{ route('admin.reports') }}" class="flex items-center space-x-2 text-white/90 hover:bg-white/10 hover:text-white p-3 rounded-lg transition-colors {{ request()->routeIs('admin.reports') ? 'active' : '' }}">
+                <a href="{{ route('admin.reports') }}" class="sidebar-link {{ request()->routeIs('admin.reports') ? 'active' : '' }}">
                     <i class="fa-solid fa-triangle-exclamation sidebar-icon"></i>
                     <span>Manajemen Laporan</span>
                 </a>
-                <a href="{{ route('admin.profile') }}" class="flex items-center space-x-2 text-white/90 hover:bg-white/10 hover:text-white p-3 rounded-lg transition-colors {{ request()->routeIs('admin.profile') ? 'active' : '' }}">
+                <a href="{{ route('admin.profile') }}" class="sidebar-link {{ request()->routeIs('admin.profile') ? 'active' : '' }}">
                     <i class="fa-solid fa-gear sidebar-icon"></i>
                     <span>Profil Admin</span>
+                </a>
+                <a href="{{ route('home') }}" class="sidebar-link bg-white/10 hover:bg-white/20">
+                    <i class="fa-solid fa-house sidebar-icon"></i>
+                    <span>Ke Beranda</span>
                 </a>
             </nav>
             
             <div class="absolute bottom-4 left-4 right-4">
-                <a href="#" class="flex items-center space-x-2 text-white/90 hover:text-white p-3 rounded-lg transition-colors">
-                    <i class="fa-solid fa-right-from-bracket sidebar-icon"></i>
-                    <span>Logout</span>
-                </a>
+                <form method="POST" action="{{ route('logout') }}" class="m-0">
+                    @csrf
+                    <button type="submit" class="sidebar-link w-full text-left">
+                        <i class="fa-solid fa-right-from-bracket sidebar-icon"></i>
+                        <span>Logout</span>
+                    </button>
+                </form>
             </div>
         </div>
 
@@ -64,6 +88,10 @@
                 <div class="flex items-center justify-between">
                     <h1 class="text-2xl font-bold text-gray-800">Dashboard Admin</h1>
                     <div class="flex items-center space-x-4">
+                        <a href="{{ route('home') }}" class="hidden sm:inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                            <i class="fa-solid fa-house"></i>
+                            <span>Ke Beranda</span>
+                        </a>
                         <div class="relative" id="notifArea">
                             <button id="notifBtn" class="bg-orange-500 text-white p-2 rounded-full hover:bg-orange-600 transition-colors">
                                 <i class="fa-solid fa-bell"></i>
@@ -112,7 +140,7 @@
             <main class="p-6 overflow-y-auto h-full">
                 <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    <div class="rounded-2xl p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all metric-card">
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm font-medium text-gray-600">Total Pengguna</p>
@@ -125,7 +153,7 @@
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    <div class="rounded-2xl p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all metric-card">
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm font-medium text-gray-600">Lowongan Aktif</p>
@@ -138,7 +166,7 @@
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    <div class="rounded-2xl p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all metric-card">
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm font-medium text-gray-600">Transaksi Bulan Ini</p>
@@ -151,7 +179,7 @@
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    <div class="rounded-2xl p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all metric-card">
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm font-medium text-gray-600">Laporan Pending</p>
@@ -168,19 +196,15 @@
                 <!-- Charts and Tables Row -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                     <!-- User Growth Chart -->
-                    <div class="rounded-xl shadow-sm p-6 border border-gray-100" style="background: linear-gradient(180deg, rgba(102,126,234,0.08), rgba(102,126,234,0.12));">
+                    <div class="rounded-xl shadow-sm p-6 border border-gray-100" style="background: rgba(102,126,234,0.12);">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">Pertumbuhan Pengguna</h3>
-                        <div class="h-64 bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg flex items-center justify-center">
-                            <div class="text-center">
-                                <span class="text-4xl mb-2 block">📈</span>
-                                <p class="text-gray-600">Chart akan ditampilkan di sini</p>
-                                <p class="text-sm text-gray-500">Integrasi dengan Chart.js</p>
-                            </div>
+                        <div class="h-64 rounded-lg overflow-hidden bg-white/60 p-2">
+                            <canvas id="userGrowthChart" class="w-full h-full"></canvas>
                         </div>
                     </div>
 
                     <!-- Job Categories Distribution -->
-                    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <div class="rounded-xl shadow-sm p-6 border border-gray-100" style="background: rgba(102,126,234,0.12);">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">Distribusi Kategori Pekerjaan</h3>
                         <div class="space-y-3">
                             <div class="flex items-center justify-between">
@@ -218,41 +242,36 @@
                 <!-- Recent Activities -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <!-- Recent Users -->
-                    <div class="rounded-xl shadow-sm p-6 border border-gray-100" style="background: linear-gradient(180deg, rgba(102,126,234,0.08), rgba(102,126,234,0.12));">
+                    <div class="rounded-xl shadow-sm p-6 border border-gray-100" style="background: rgba(249,115,22,0.12);">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-lg font-semibold text-gray-800">Pengguna Terbaru</h3>
                             <a href="#" class="text-orange-500 hover:text-orange-600 text-sm font-medium">Lihat Semua</a>
                         </div>
+                        @php
+                            $recentUsers = isset($recentUsers) ? $recentUsers : (\App\Models\User::orderBy('created_at','desc')->take(5)->get());
+                        @endphp
                         <div class="space-y-4">
-                            <div class="flex items-center space-x-3">
-                                <img src="https://via.placeholder.com/40" alt="User" class="w-10 h-10 rounded-full">
-                                <div class="flex-1">
-                                    <p class="text-sm font-medium text-gray-800">Ahmad Rizki</p>
-                                    <p class="text-xs text-gray-500">Pekerja • Bergabung 2 jam lalu</p>
+                            @forelse($recentUsers as $u)
+                                <div class="flex items-center space-x-3">
+                                    <img src="https://via.placeholder.com/40" alt="User" class="w-10 h-10 rounded-full">
+                                    <div class="flex-1">
+                                        <p class="text-sm font-medium text-gray-800">{{ $u->name }}</p>
+                                        <p class="text-xs text-gray-500">{{ ucfirst($u->role) }} • Bergabung {{ $u->created_at->diffForHumans() }}</p>
+                                    </div>
+                                    @if(!empty($u->is_active))
+                                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Aktif</span>
+                                    @else
+                                        <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full">Nonaktif</span>
+                                    @endif
                                 </div>
-                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Aktif</span>
-                            </div>
-                            <div class="flex items-center space-x-3">
-                                <img src="https://via.placeholder.com/40" alt="User" class="w-10 h-10 rounded-full">
-                                <div class="flex-1">
-                                    <p class="text-sm font-medium text-gray-800">Sari Dewi</p>
-                                    <p class="text-xs text-gray-500">Pemberi Kerja • Bergabung 5 jam lalu</p>
-                                </div>
-                                <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Pending</span>
-                            </div>
-                            <div class="flex items-center space-x-3">
-                                <img src="https://via.placeholder.com/40" alt="User" class="w-10 h-10 rounded-full">
-                                <div class="flex-1">
-                                    <p class="text-sm font-medium text-gray-800">Budi Santoso</p>
-                                    <p class="text-xs text-gray-500">Pekerja • Bergabung 1 hari lalu</p>
-                                </div>
-                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Aktif</span>
-                            </div>
+                            @empty
+                                <p class="text-sm text-gray-600">Belum ada pengguna.</p>
+                            @endforelse
                         </div>
                     </div>
 
                     <!-- Recent Jobs -->
-                    <div class="rounded-xl shadow-sm p-6 border border-gray-100" style="background: linear-gradient(180deg, rgba(102,126,234,0.08), rgba(102,126,234,0.12));">
+                    <div class="rounded-xl shadow-sm p-6 border border-gray-100" style="background: rgba(249,115,22,0.12);">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-lg font-semibold text-gray-800">Lowongan Terbaru</h3>
                             <a href="#" class="text-orange-500 hover:text-orange-600 text-sm font-medium">Lihat Semua</a>
@@ -279,6 +298,36 @@
             </main>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            const ctx = document.getElementById('userGrowthChart');
+            if (ctx && window.Chart) {
+                const data = {
+                    labels: ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],
+                    datasets: [{
+                        label: 'Pengguna Baru',
+                        data: [120, 180, 160, 220, 260, 240, 300, 320, 310, 360, 400, 420],
+                        borderColor: '#f97316',
+                        backgroundColor: 'rgba(249,115,22,0.25)',
+                        tension: 0.35,
+                        fill: true,
+                        pointRadius: 3
+                    }]
+                };
+                const options = {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: { grid: { color: 'rgba(0,0,0,0.06)' }, ticks: { stepSize: 50 } }
+                    }
+                };
+                new Chart(ctx, { type: 'line', data, options });
+            }
+        });
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function(){
             const btn = document.getElementById('notifBtn');

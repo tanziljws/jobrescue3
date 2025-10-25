@@ -41,7 +41,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 1.2rem 2rem;
+            padding: 1rem 2rem;
             max-width: 1200px;
             margin: 0 auto;
             position: relative;
@@ -114,11 +114,11 @@
         .nav-menu {
             display: flex;
             list-style: none;
-            gap: 0.5rem;
+            gap: 0.25rem;
             align-items: center;
             background: rgba(249, 115, 22, 0.05);
             backdrop-filter: blur(10px);
-            padding: 0.5rem;
+            padding: 0.4rem;
             border-radius: 50px;
             border: 1px solid rgba(249, 115, 22, 0.1);
             margin: 0;
@@ -130,38 +130,22 @@
             font-weight: 500;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
-            padding: 0.8rem 1.5rem;
+            padding: 0.65rem 1.25rem;
             border-radius: 25px;
-            font-size: 0.95rem;
-            letter-spacing: 0.3px;
+            font-size: 0.9rem;
+            letter-spacing: 0.2px;
         }
 
-        .nav-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(59, 130, 246, 0.1));
-            border-radius: 25px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: -1;
-        }
-
-        .nav-link:hover::before,
-        .nav-link.active::before {
-            opacity: 1;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
+        .nav-link:hover:not(.active) {
             color: #f97316;
-            background: rgba(249, 115, 22, 0.1);
+        }
+
+        .nav-link.active {
+            color: #ffffff;
+            background: linear-gradient(135deg, #f97316, #ea580c);
             backdrop-filter: blur(15px);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(249, 115, 22, 0.15);
+            font-weight: 600;
+            pointer-events: none;
         }
 
         .btn-register {
@@ -635,7 +619,7 @@
         .steps-container {
             display: grid;
             grid-template-columns: repeat(3, minmax(0,1fr));
-            gap: 1.25rem;
+            gap: 2rem;
             align-items: stretch;
             position: relative;
         }
@@ -647,37 +631,72 @@
             background: rgba(255, 255, 255, 0.16);
             border: 1px solid rgba(255,255,255,0.22);
             backdrop-filter: blur(6px);
-            padding: 2.25rem 1.5rem 1.5rem;
+            padding: 2rem 1.75rem;
             border-radius: 20px;
             text-align: center;
             transition: all 0.3s ease;
             position: relative;
             z-index: 2;
             box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 280px;
+        }
+
+        .step-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
         }
 
         .step-item:not(:last-child)::after { content: none; }
 
         .step-number {
-            width: 44px;
-            height: 44px;
+            width: 56px;
+            height: 56px;
             background: linear-gradient(135deg, #f97316, #ea580c);
             border-radius: 50%;
-            display: grid;
-            place-items: center;
-            position: absolute;
-            top: 12px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
             font-weight: 800;
             color: white;
-            box-shadow: 0 6px 14px rgba(249, 115, 22, 0.28);
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.4);
+            margin-bottom: 1.5rem;
+            flex-shrink: 0;
         }
 
-        .step-title { font-size: 1.3rem; font-weight: 800; color: #ffffff; margin-bottom: 0.75rem; }
-        .step-description { color: rgba(255, 255, 255, 0.85); font-size: 1rem; line-height: 1.6; }
-        .step-icon { margin-top: 1.5rem; font-size: 2rem; color: rgba(255, 255, 255, 0.7); }
+        .step-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .step-title { 
+            font-size: 1.25rem; 
+            font-weight: 700; 
+            color: #ffffff; 
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+        }
+        
+        .step-description { 
+            color: rgba(255, 255, 255, 0.9); 
+            font-size: 0.95rem; 
+            line-height: 1.6;
+            max-width: 280px;
+        }
+        
+        .step-icon { 
+            margin-top: 1.25rem; 
+            font-size: 2.5rem; 
+            color: rgba(255, 255, 255, 0.6);
+            flex-shrink: 0;
+        }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -707,6 +726,45 @@
 
             .features-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .steps-container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .step-item {
+                min-height: auto;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .steps-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.25rem;
+            }
+
+            .step-item {
+                padding: 1.75rem 1.5rem;
+                min-height: 260px;
+            }
+
+            .step-number {
+                width: 48px;
+                height: 48px;
+                font-size: 1.3rem;
+            }
+
+            .step-title {
+                font-size: 1.1rem;
+            }
+
+            .step-description {
+                font-size: 0.9rem;
+            }
+
+            .step-icon {
+                font-size: 2rem;
             }
         }
 
@@ -804,29 +862,146 @@
         .features .section-title { color: #ffffff; }
         .features .section-subtitle { color: rgba(255, 255, 255, 0.9); }
 
-        /* Stats Strip Section (reverted) */
-        .stats-strip {
-            background: #ffffff;
-            padding: 3rem 0;
-            border-top: 1px solid rgba(0,0,0,0.05);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+        /* Stats Strip Section */
+        .stats-strip,
+        .stats {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 5rem 0;
+            position: relative;
         }
-        .stats-strip .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
-        .stat-card {
-            background: #fee8d6;
-            border: 1px solid rgba(249, 115, 22, 0.25);
-            border-radius: 18px;
-            padding: 2rem 1.5rem;
-            min-height: 150px;
+        
+        .stats-strip::before,
+        .stats::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(148,163,184,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.5;
+        }
+        
+        .stats-strip .container,
+        .stats .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stats-grid { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 2rem; 
+        }
+        
+        .stat-card,
+        .stat-item {
+            background: rgba(249,115,22,.12);
+            border: 2px solid rgba(249,115,22,.25);
+            background-clip: padding-box;
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
+            min-height: 180px;
             text-align: center;
-            box-shadow: 0 6px 14px rgba(0,0,0,0.06);
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .4rem;
+            box-shadow: 0 10px 30px rgba(249,115,22,.1), 
+                        0 1px 3px rgba(249,115,22,.05);
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 0.75rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .stat-number { color: #ea580c; font-weight: 900; font-size: 2.25rem; letter-spacing: 0.3px; text-shadow: 0 1px 0 rgba(255,255,255,0.7); line-height: 1; }
-        .stat-label { color: #6b7280; font-weight: 600; font-size: 0.95rem; margin-top: 0.25rem; }
-        @media (max-width: 992px) { .stats-grid { grid-template-columns: 1fr 1fr; } }
-        @media (max-width: 600px) { .stats-grid { grid-template-columns: 1fr; } }
+        
+        .stat-card::before,
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #f97316, #ea580c, #dc2626);
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .stat-card:hover,
+        .stat-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(249,115,22,.2),
+                        0 5px 15px rgba(249,115,22,.1);
+            border-color: rgba(249,115,22,.4);
+        }
+        
+        .stat-card:hover::before,
+        .stat-item:hover::before {
+            opacity: 1;
+        }
+        
+        .stat-number { 
+            color: #f97316; 
+            font-weight: 900; 
+            font-size: 3rem; 
+            letter-spacing: -1px; 
+            line-height: 1;
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 2px 4px rgba(249, 115, 22, 0.2));
+        }
+        
+        .stat-label { 
+            color: #64748b; 
+            font-weight: 600; 
+            font-size: 1rem; 
+            margin-top: 0.25rem;
+            letter-spacing: 0.3px;
+        }
+        
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3);
+        }
+        
+        @media (max-width: 992px) { 
+            .stats-grid { 
+                grid-template-columns: 1fr 1fr; 
+                gap: 1.5rem;
+            } 
+        }
+        
+        @media (max-width: 600px) { 
+            .stats-grid { 
+                grid-template-columns: 1fr;
+                gap: 1.25rem;
+            }
+            
+            .stat-card,
+            .stat-item {
+                min-height: 160px;
+                padding: 2rem 1.5rem;
+            }
+            
+            .stat-number {
+                font-size: 2.5rem;
+            }
+        }
 
         /* Categories Section (reverted) */
         .categories-section { background: #f8fafc; padding: 4rem 0; }
@@ -835,7 +1010,8 @@
         .categories-title { font-size: 2.25rem; font-weight: 800; color: #2563eb; }
         .categories-subtitle { color: #64748b; margin-top: .5rem; }
         .categories-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-        .category-card { background: #ffe9d6; border: 1px solid rgba(249,115,22,0.25); border-radius: 22px; padding: 1.75rem; box-shadow: 0 8px 18px rgba(0,0,0,0.06); }
+        .category-card { background: #ffe9d6; border: 1px solid rgba(249,115,22,0.25); border-radius: 22px; padding: 1.75rem; box-shadow: 0 8px 18px rgba(0,0,0,0.06); cursor: pointer; transition: all .3s ease; text-decoration: none; display: block; }
+        .category-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(249,115,22,0.2); border-color: rgba(249,115,22,0.4); }
         .category-head { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6rem; margin-bottom: 1rem; text-align: center; }
         .category-icon { width: 56px; height: 56px; border-radius: 16px; background: linear-gradient(135deg,#3b82f6,#1d4ed8); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.4rem; box-shadow: 0 8px 24px rgba(59,130,246,.35); }
         .category-title { font-weight: 700; color: #0f172a; font-size: 1.15rem; text-align: center; }
@@ -1034,33 +1210,29 @@
         .form-button:hover { transform: translateY(-1px); background: #ffffff; color: #2563eb; border: 2px solid #2563eb; box-shadow: 0 16px 36px rgba(37,99,235,0.25); }
 
         /* Footer */
-        .footer { background: #ffffff; color: #111827; padding: 3.5rem 0 2rem; border-top: 1px solid rgba(0,0,0,0.06); position: relative; overflow: hidden; }
-        .footer .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
-        .footer-content { display: grid; grid-template-columns: 1.5fr 2fr; gap: 2.5rem; align-items: start; }
-        @media (max-width: 992px) { .footer-content { grid-template-columns: 1fr; } }
-
-        .footer-brand .logo { width: 50px; height: 50px; border-radius: 15px; background: linear-gradient(135deg,#f97316,#ea580c); color:#fff; display:inline-flex; align-items:center; justify-content:center; box-shadow: 0 12px 28px rgba(249,115,22,.38); vertical-align: middle; }
-        .footer-brand .brand-text { color: #111827; margin-left: .75rem; display: inline-block; vertical-align: middle; }
-        .footer-description { color: #6b7280; opacity: 1; margin-top: .75rem; max-width: 28rem; }
-
-        .footer-links { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.75rem; align-items: start; }
-        @media (max-width: 992px) { .footer-links { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-        @media (max-width: 520px) { .footer-links { grid-template-columns: 1fr; } }
-        .footer-title { color: #1f2937; font-weight: 800; margin-bottom: .75rem; }
-        .footer-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .45rem; }
-        .footer-list a { color: #374151; text-decoration: none; transition: color .2s ease; }
-        .footer-list a:hover { color: #111827; }
-
-        .footer-bottom { margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid rgba(0,0,0,0.08); display: flex; flex-direction: column; align-items: center; gap: .75rem; }
-        .footer-legal { color: #6b7280; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; justify-content: center; }
-        .footer-legal a { color: #374151; text-decoration: none; }
-        .footer-legal a:hover { color: #111827; text-decoration: underline; }
-
-        .footer-social { text-align: center; }
-        .footer-social .social-title { color: #1f2937; margin: .25rem 0 .5rem 0; }
-        .social-links { display: flex; gap: .6rem; justify-content: center; }
-        .social-link { width: 36px; height: 36px; border-radius: 9999px; background: rgba(0,0,0,0.06); display:flex; align-items:center; justify-content:center; color:#1f2937; transition: transform .2s ease, background .2s ease, color .2s ease; text-decoration: none; }
-        .social-link:hover { transform: translateY(-2px); background: rgba(0,0,0,0.12); color: #111827; }
+        .footer{background:#ffffff;color:#111827;padding:3rem 0;border-top:1px solid rgba(0,0,0,.06)}
+      .footer .container{max-width:1200px;margin:0 auto;padding:0 2rem}
+      .footer-content{display:grid;grid-template-columns:1.5fr 2fr;gap:2.5rem;align-items:start}
+      @media (max-width:992px){.footer-content{grid-template-columns:1fr}}
+      .footer-brand .logo{width:50px;height:50px;border-radius:15px;background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 12px 28px rgba(249,115,22,.38);vertical-align:middle}
+      .footer-brand .brand-text{color:#111827;margin-left:.75rem;display:inline-block;vertical-align:middle;font-size:1.8rem;font-weight:800}
+      .footer-description{color:#6b7280;margin-top:.75rem;max-width:28rem}
+      .footer-links{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.75rem;align-items:start}
+      @media (max-width:992px){.footer-links{grid-template-columns:repeat(2,minmax(0,1fr))}}
+      @media (max-width:520px){.footer-links{grid-template-columns:1fr}}
+      .footer-title{color:#f97316;font-weight:800;margin-bottom:.75rem}
+      .footer-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.45rem}
+      .footer-list a{color:#374151;text-decoration:none;transition:color .2s ease}
+      .footer-list a:hover{color:#111827}
+      .footer-bottom{margin-top:2rem;padding-top:1.25rem;border-top:1px solid rgba(0,0,0,.08);display:flex;flex-direction:column;align-items:center;gap:.75rem}
+      .footer-social{text-align:center}
+      .footer-social .social-title{color:#1f2937;margin:.25rem 0 .5rem 0;font-weight:600}
+      .social-links{display:flex;gap:.6rem;justify-content:center}
+      .social-link{width:36px;height:36px;border-radius:9999px;background:rgba(0,0,0,.06);display:flex;align-items:center;justify-content:center;color:#1f2937;transition:transform .2s ease,background .2s ease,color .2s ease;text-decoration:none}
+      .social-link:hover{transform:translateY(-2px);background:rgba(0,0,0,.12);color:#111827}
+      .footer-legal{color:#6b7280;display:flex;gap:1rem;align-items:center;flex-wrap:wrap;justify-content:center}
+      .footer-legal a{color:#374151;text-decoration:none}
+      .footer-legal a:hover{color:#111827;text-decoration:underline}
 
         * { box-sizing: border-box; }
     </style>
@@ -1097,26 +1269,34 @@
                     <span class="brand-text">JobRescue</span>
                 </div>
                 
-                <ul class="nav-menu">
+                <ul class="nav-menu" id="navMenu">
                     <li><a href="#" class="nav-link active">Beranda</a></li>
                     <li><a href="{{ route('jobs.index') }}" class="nav-link">Cari Kerja</a></li>
                     <li><a href="{{ route('talents.index') }}" class="nav-link">Cari Talent</a></li>
-                    <li><a href="#" class="nav-link">Tentang</a></li>
+                    @if(!auth()->check() || (auth()->user()->role !== 'admin' && auth()->user()->role !== 'worker'))
+                        <li><a href="{{ route('pricing') }}" class="nav-link">Pricing</a></li>
+                    @endif
+                    <li><a href="{{ route('about') }}" class="nav-link">Tentang</a></li>
                     @auth
                         @if(Auth::user()->role === 'admin')
                             <li><a href="{{ route('admin.dashboard') }}" class="nav-link">Admin</a></li>
                         @endif
-                    @else
-                        <li><a href="{{ route('login') }}" class="nav-link">Login</a></li>
                     @endauth
+                    @guest
+                        <li><a href="{{ route('login') }}" class="nav-link">Login</a></li>
+                    @endguest
                 </ul>
 
                 @guest
                     <a href="{{ route('register') }}" class="btn-register">Daftar</a>
                 @else
                     <div class="user-menu" style="position:relative;">
-                        <div class="user-avatar" style="width:36px;height:36px;border-radius:9999px;background:#f97316;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;cursor:pointer;">
-                            {{ strtoupper(substr(Auth::user()->name,0,1)) }}
+                        <div class="user-avatar" style="width:36px;height:36px;border-radius:9999px;background:#f97316;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;cursor:pointer;overflow:hidden;">
+                            @if(Auth::user()->profile_photo)
+                                <img src="{{ asset('storage/'.Auth::user()->profile_photo) }}" alt="{{ Auth::user()->name }}" style="width:100%;height:100%;object-fit:cover;border-radius:9999px;display:block;">
+                            @else
+                                {{ strtoupper(substr(Auth::user()->name,0,1)) }}
+                            @endif
                         </div>
                         <div class="user-dropdown" style="display:none;position:absolute;right:0;top:44px;background:#ffffff;border:1px solid rgba(0,0,0,0.08);border-radius:12px;box-shadow:0 12px 28px rgba(0,0,0,0.12);min-width:160px;z-index:1001;">
                             <div style="padding:.5rem 0;">
@@ -1158,6 +1338,11 @@
                     </script>
                 @endguest
                 
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
                 <div class="hamburger">
                     <span></span>
                     <span></span>
@@ -1215,25 +1400,37 @@
             </div>
         </section>
 
-        <!-- Stats Strip Section -->
-        <section class="stats-strip">
+        <!-- Stats Section -->
+        <section class="stats">
             <div class="container">
                 <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number">1250</div>
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <div class="stat-number" data-target="1250">1,250</div>
                         <div class="stat-label">Pekerjaan di Bogor</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-number">350</div>
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="stat-number" data-target="350">350</div>
                         <div class="stat-label">UMKM Bogor</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-number">2100</div>
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-number" data-target="2100">2,100</div>
                         <div class="stat-label">Talent Bogor</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-number">98</div>
-                        <div class="stat-label">% Kepuasan</div>
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-number" data-target="98">98%</div>
+                        <div class="stat-label">Kepuasan</div>
                     </div>
                 </div>
             </div>
@@ -1280,7 +1477,7 @@
                     <p class="categories-subtitle">Temukan pekerjaan sesuai dengan keahlian dan minat Anda</p>
                 </div>
                 <div class="categories-grid">
-                    <div class="category-card">
+                    <a href="{{ route('jobs.index', ['category' => 1]) }}" class="category-card">
                         <div class="category-head">
                             <div class="category-icon"><i class="fas fa-store"></i></div>
                             <div class="category-title">Retail & Toko</div>
@@ -1288,23 +1485,23 @@
                         </div>
                         <div class="category-tags">
                             <span class="category-tag">Kasir</span>
-                            <span class="category-tag">Sales</span>
-                            <span class="category-tag">Inventory</span>
+                            <span class="category-tag">Penjualan</span>
+                            <span class="category-tag">Inventori</span>
                         </div>
-                    </div>
-                    <div class="category-card">
+                    </a>
+                    <a href="{{ route('jobs.index', ['category' => 2]) }}" class="category-card">
                         <div class="category-head">
                             <div class="category-icon"><i class="fas fa-utensils"></i></div>
                             <div class="category-title">Kuliner Bogor</div>
                             <div class="category-badge">280+ Jobs</div>
                         </div>
                         <div class="category-tags">
-                            <span class="category-tag">Chef</span>
-                            <span class="category-tag">Waitress</span>
-                            <span class="category-tag">Delivery</span>
+                            <span class="category-tag">Koki</span>
+                            <span class="category-tag">Pelayan</span>
+                            <span class="category-tag">Pengantar</span>
                         </div>
-                    </div>
-                    <div class="category-card">
+                    </a>
+                    <a href="{{ route('jobs.index', ['category' => 3]) }}" class="category-card">
                         <div class="category-head">
                             <div class="category-icon"><i class="fas fa-graduation-cap"></i></div>
                             <div class="category-title">Pendidikan</div>
@@ -1313,10 +1510,10 @@
                         <div class="category-tags">
                             <span class="category-tag">Guru Les</span>
                             <span class="category-tag">Tutor</span>
-                            <span class="category-tag">Admin</span>
+                            <span class="category-tag">Administrasi</span>
                         </div>
-                    </div>
-                    <div class="category-card">
+                    </a>
+                    <a href="{{ route('jobs.index', ['category' => 4]) }}" class="category-card">
                         <div class="category-head">
                             <div class="category-icon"><i class="fas fa-motorcycle"></i></div>
                             <div class="category-title">Transportasi & Kurir</div>
@@ -1327,31 +1524,31 @@
                             <span class="category-tag">Ojek Online</span>
                             <span class="category-tag">Kurir</span>
                         </div>
-                    </div>
-                    <div class="category-card">
+                    </a>
+                    <a href="{{ route('jobs.index', ['category' => 5]) }}" class="category-card">
                         <div class="category-head">
                             <div class="category-icon"><i class="fas fa-building"></i></div>
                             <div class="category-title">Properti</div>
                             <div class="category-badge">180+ Jobs</div>
                         </div>
                         <div class="category-tags">
-                            <span class="category-tag">Agent</span>
-                            <span class="category-tag">Marketing</span>
+                            <span class="category-tag">Agen</span>
+                            <span class="category-tag">Pemasaran</span>
                             <span class="category-tag">Surveyor</span>
                         </div>
-                    </div>
-                    <div class="category-card">
+                    </a>
+                    <a href="{{ route('jobs.index', ['category' => 6]) }}" class="category-card">
                         <div class="category-head">
                             <div class="category-icon"><i class="fas fa-code"></i></div>
                             <div class="category-title">IT & Digital</div>
                             <div class="category-badge">150+ Jobs</div>
                         </div>
                         <div class="category-tags">
-                            <span class="category-tag">Web Dev</span>
-                            <span class="category-tag">Design</span>
-                            <span class="category-tag">Marketing</span>
+                            <span class="category-tag">Pengembang Web</span>
+                            <span class="category-tag">Desain</span>
+                            <span class="category-tag">Pemasaran Digital</span>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
         </section>
@@ -1746,17 +1943,19 @@
             <div class="container">
                 <div class="footer-content">
                     <div class="footer-brand">
-                        <div class="logo">
-                            <img src="{{ asset('img/icon.svg') }}" alt="Logo JobRescue" style="width:28px;height:28px;filter:brightness(0) invert(1);" />
+                        <div>
+                            <div class="logo">
+                                <img src="{{ asset('img/icon.svg') }}" alt="Logo JobRescue" style="width:28px;height:28px;filter:brightness(0) invert(1);" />
+                            </div>
+                            <span class="brand-text">JobRescue</span>
                         </div>
-                        <span class="brand-text">JobRescue</span>
                         <p class="footer-description">Menghubungkan talenta Bogor dengan peluang kerja mikro dan UMKM di Kota Bogor</p>
                     </div>
                     <div class="footer-links">
                         <div class="footer-column">
                             <h4 class="footer-title">Perusahaan</h4>
                             <ul class="footer-list">
-                                <li><a href="#">Tentang Kami</a></li>
+                                <li><a href="{{ route('about') }}">Tentang Kami</a></li>
                                 <li><a href="#">Karir</a></li>
                                 <li><a href="#">Blog</a></li>
                                 <li><a href="#">Press</a></li>
@@ -1891,6 +2090,48 @@
                     }
                 });
             }
+
+            // Stats counter animation
+            const statNumbers = document.querySelectorAll('.stat-number[data-target]');
+            const animateCounter = (element) => {
+                const target = parseInt(element.getAttribute('data-target'));
+                const duration = 2000; // 2 seconds
+                const increment = target / (duration / 16); // 60fps
+                let current = 0;
+                
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        element.textContent = Math.floor(current).toLocaleString();
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        // Final value with proper formatting
+                        if (element.parentElement.querySelector('.stat-label').textContent.includes('Kepuasan')) {
+                            element.textContent = target + '%';
+                        } else {
+                            element.textContent = target.toLocaleString();
+                        }
+                    }
+                };
+                updateCounter();
+            };
+
+            // Intersection Observer for stats animation
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const statNumber = entry.target;
+                        if (!statNumber.classList.contains('animated')) {
+                            statNumber.classList.add('animated');
+                            animateCounter(statNumber);
+                        }
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            statNumbers.forEach(stat => {
+                statsObserver.observe(stat);
+            });
 
             // FAQ accordion behavior
             const faqItems = document.querySelectorAll('.faq-item');

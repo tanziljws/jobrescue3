@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style id="admin-auth-inline">
         body {
-            background: #667eea;
+            background: rgba(249,115,22,0.08);
             min-height: 100vh;
             font-family: 'Poppins', sans-serif;
         }
@@ -21,7 +21,7 @@
         .admin-auth-shell{max-width:1000px;margin:0 auto;padding:16px;}
         .auth-split-card{display:grid;grid-template-columns:1fr 1.2fr;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.15);overflow:hidden;border:1px solid rgba(255,255,255,.3)}
         @media(max-width:900px){.auth-split-card{grid-template-columns:1fr}}
-        .left-panel{position:relative;min-height:700px;background:linear-gradient(135deg, #667eea 0%, #f97316 100%);}
+        .left-panel{position:relative;min-height:700px;background:#667eea;}
         .left-panel:before{content:"";position:absolute;inset:0;background:radial-gradient(800px 400px at 20% 80%, rgba(255,255,255,.18), transparent 60%),radial-gradient(600px 300px at 90% 10%, rgba(255,255,255,.12), transparent 60%);}
         .lp-content{position:relative;z-index:2;color:#fff;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;height:100%;padding:48px}
         .lp-badge{width:72px;height:72px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,.2)}
@@ -140,6 +140,16 @@
                                 Masuk di sini
                             </a>
                         </p>
+                        
+                        @if(request('plan'))
+                            <div style="background:#f0f9ff;border:2px solid #0ea5e9;border-radius:12px;padding:16px;margin-bottom:20px;color:#0c4a6e;font-size:14px;">
+                                <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                                    <i class="fas fa-crown" style="color:#f97316;"></i>
+                                    <strong>Paket {{ ucfirst(request('plan')) }} Dipilih!</strong>
+                                </div>
+                                <p style="margin:0;">Setelah mendaftar, Anda akan dapat mengakses fitur paket {{ ucfirst(request('plan')) }}. Daftar sekarang untuk memulai!</p>
+                            </div>
+                        @endif
                 @if ($errors->any())
                     <div class="mb-4 bg-red-50 border border-red-200 rounded-lg p-4">
                         <div class="flex">

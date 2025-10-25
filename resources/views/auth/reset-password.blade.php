@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - JobRescue</title>
+    <title>Reset Password - JobRescue</title>
     <link rel="icon" type="image/svg" href="{{ asset('img/favicon.svg') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <!-- Font Awesome -->
@@ -29,7 +29,7 @@
         .lp-sub{opacity:.9;font-weight:500}
         .right-panel{padding:40px;background:#fff}
         .right-panel .form-title{font-family:'Poppins',sans-serif;font-weight:800;font-size:26px;margin:0 0 6px;color:#1e293b}
-        .right-panel .form-desc{color:#64748b;margin:0 0 24px;font-family:'Poppins',sans-serif}
+        .right-panel .form-desc{color:#64748b;margin:0 0 24px;font-family:'Poppins',sans-serif;line-height:1.5}
         .form-group{margin-bottom:20px}
         .input-with-icon{position:relative;display:block}
         .input-with-icon > i{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:#64748b;font-size:16px;z-index:2}
@@ -42,14 +42,14 @@
         .toggle-password i{font-size:14px;pointer-events:none}
         .form-button{width:100%;background:#f97316;color:white;border:none;padding:16px 24px;border-radius:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.2s;font-size:15px;margin-top:0;font-family:'Poppins',sans-serif}
         .form-button:hover{transform:translateY(-1px);box-shadow:0 8px 25px rgba(249,115,22,0.35)}
-        .login-extra{display:flex;align-items:center;justify-content:space-between;margin:16px 0 24px 0}
-        .remember-me{display:flex;align-items:center;gap:8px;font-size:14px;color:#64748b;cursor:pointer;font-family:'Poppins',sans-serif}
-        .remember-me input[type="checkbox"]{width:16px;height:16px;accent-color:#f97316;cursor:pointer}
-        .forgot-password{color:#f97316;text-decoration:none;font-size:14px;font-family:'Poppins',sans-serif}
-        .forgot-password:hover{text-decoration:underline}
-        .login-footer{margin-top:14px;color:#64748b;font-size:14px;font-family:'Poppins',sans-serif}
+        .form-button:disabled{background:#94a3b8;cursor:not-allowed;transform:none;box-shadow:none}
+        .login-footer{margin-top:24px;color:#64748b;font-size:14px;font-family:'Poppins',sans-serif;text-align:center}
         .login-footer a{color:#f97316;text-decoration:none}
         .login-footer a:hover{text-decoration:underline}
+        .password-requirements{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin-bottom:20px;font-size:14px;color:#64748b}
+        .password-requirements h4{color:#1e293b;margin:0 0 8px 0;font-weight:600}
+        .password-requirements ul{margin:0;padding-left:20px}
+        .password-requirements li{margin-bottom:4px}
     </style>
 </head>
 <body>
@@ -62,71 +62,78 @@
                             <div class="lp-badge">
                                 <img src="{{ asset('img/icon.svg') }}" alt="JobRescue Logo" style="width:42px;height:42px;">
                             </div>
-                            <h2 class="lp-title">Selamat<br>Datang!</h2>
-                            <p class="lp-sub">Masuk ke akun JobRescue Anda</p>
+                            <h2 class="lp-title">Buat Password<br>Baru</h2>
+                            <p class="lp-sub">Masukkan password baru yang aman untuk akun Anda</p>
                         </div>
                     </div>
                     <div class="right-panel">
-                        <h3 class="form-title">Masuk</h3>
-                        <p class="form-desc">Selamat datang kembali! Silakan masuk ke akun Anda.</p>
-                
-                @if (session('status'))
-                    <div class="mb-4 bg-green-50 border border-green-200 rounded-lg p-4">
-                        <div class="flex">
-                            <span class="text-green-400 mr-2">✅</span>
-                            <div>
-                                <p class="text-sm font-medium text-green-800">{{ session('status') }}</p>
+                        <h3 class="form-title">Reset Password</h3>
+                        <p class="form-desc">Buat password baru yang kuat untuk melindungi akun Anda.</p>
+                        
+                        @if ($errors->any())
+                            <div class="mb-4 bg-red-50 border border-red-200 rounded-lg p-4">
+                                <div class="flex">
+                                    <span class="text-red-400 mr-2">⚠️</span>
+                                    <div>
+                                        <h3 class="text-sm font-medium text-red-800">Terjadi kesalahan:</h3>
+                                        <ul class="mt-2 text-sm text-red-700 list-disc list-inside">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                @endif
+                        @endif
 
-                @if ($errors->any())
-                    <div class="mb-4 bg-red-50 border border-red-200 rounded-lg p-4">
-                        <div class="flex">
-                            <span class="text-red-400 mr-2">⚠️</span>
-                            <div>
-                                <h3 class="text-sm font-medium text-red-800">Terjadi kesalahan:</h3>
-                                <ul class="mt-2 text-sm text-red-700 list-disc list-inside">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
+                        <div class="password-requirements">
+                            <h4>Persyaratan Password:</h4>
+                            <ul>
+                                <li>Minimal 8 karakter</li>
+                                <li>Mengandung huruf besar dan kecil</li>
+                                <li>Mengandung angka</li>
+                                <li>Mengandung karakter khusus (!@#$%^&*)</li>
+                            </ul>
                         </div>
-                    </div>
-                @endif
 
-                        <form class="form" method="POST" action="{{ route('login') }}">
+                        <form class="form" method="POST" action="{{ route('password.store') }}">
                             @csrf
+                            <input type="hidden" name="token" value="{{ $request->route('token') }}">
+                            
                             <div class="form-group">
                                 <div class="input-with-icon">
                                     <i class="fas fa-envelope"></i>
-                                    <input type="email" class="form-input" placeholder="Alamat Email" name="email" id="email" required value="{{ old('email') }}">
+                                    <input type="email" class="form-input" placeholder="Alamat Email" name="email" id="email" required value="{{ old('email', $request->email) }}" readonly style="background:#f1f5f9;">
                                 </div>
                             </div>
+                            
                             <div class="form-group">
                                 <div class="input-with-icon">
                                     <i class="fas fa-lock"></i>
-                                    <input type="password" class="form-input" placeholder="Kata Sandi" name="password" id="password" required>
+                                    <input type="password" class="form-input" placeholder="Password Baru" name="password" id="password" required>
                                     <button type="button" class="toggle-password" id="togglePassword" aria-label="Toggle password visibility">
                                         <i class="fas fa-eye"></i>
                                     </button>
                                 </div>
                             </div>
-                            <div class="login-extra">
-                                <label class="remember-me">
-                                    <input type="checkbox" id="remember" name="remember">
-                                    <span class="checkmark"></span> Ingat Saya
-                                </label>
-                                <a href="{{ route('password.request') }}" class="forgot-password">Lupa Password?</a>
+                            
+                            <div class="form-group">
+                                <div class="input-with-icon">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" class="form-input" placeholder="Konfirmasi Password Baru" name="password_confirmation" id="password_confirmation" required>
+                                    <button type="button" class="toggle-password" id="togglePasswordConfirm" aria-label="Toggle password confirmation visibility">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
                             </div>
+                            
                             <button type="submit" class="form-button">
-                                <span class="button-text">LOGIN</span>
-                                <i class="fas fa-arrow-right"></i>
+                                <span class="button-text">RESET PASSWORD</span>
+                                <i class="fas fa-key"></i>
                             </button>
+                            
                             <div class="login-footer">
-                                Belum punya akun? <a href="{{ route('register') }}">Daftar di sini</a>
+                                Ingat password Anda? <a href="{{ route('login') }}">Kembali ke Login</a>
                             </div>
                         </form>
 
@@ -138,6 +145,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Toggle password visibility for password field
             const togglePassword = document.getElementById('togglePassword');
             const passwordInput = document.getElementById('password');
             
@@ -157,6 +165,40 @@
                         icon.classList.remove('fa-eye-slash');
                         icon.classList.add('fa-eye');
                     }
+                });
+            }
+
+            // Toggle password visibility for confirmation field
+            const togglePasswordConfirm = document.getElementById('togglePasswordConfirm');
+            const passwordConfirmInput = document.getElementById('password_confirmation');
+            
+            if (togglePasswordConfirm && passwordConfirmInput) {
+                togglePasswordConfirm.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const icon = this.querySelector('i');
+                    
+                    if (passwordConfirmInput.type === 'password') {
+                        passwordConfirmInput.type = 'text';
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    } else {
+                        passwordConfirmInput.type = 'password';
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    }
+                });
+            }
+
+            // Form submission handling
+            const form = document.querySelector('.form');
+            const submitButton = document.querySelector('.form-button');
+            
+            if (form && submitButton) {
+                form.addEventListener('submit', function() {
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> MEMPROSES...';
                 });
             }
         });

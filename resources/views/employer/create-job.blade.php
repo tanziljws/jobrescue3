@@ -4,7 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post Pekerjaan Baru - Job Rescue</title>
+    <link rel="icon" type="image/svg" href="{{ asset('img/favicon.svg') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .metric-card {
+            background: rgba(249,115,22,.12);
+            border: 2px solid rgba(249,115,22,.25);
+            box-shadow: 0 10px 30px rgba(249,115,22,.10);
+        }
+    </style>
 </head>
 <body class="bg-gray-50">
     <div class="min-h-screen py-8">
@@ -12,28 +23,39 @@
             <!-- Header -->
             <div class="mb-8">
                 <div class="flex items-center space-x-4 mb-4">
-                    <a href="{{ route('employer.dashboard') }}" class="text-gray-600 hover:text-gray-800">
-                        ← Kembali ke Dashboard
+                    <a href="{{ route('employer.dashboard') }}" class="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Kembali ke Dashboard
                     </a>
                 </div>
-                <h1 class="text-3xl font-bold text-gray-900">Post Pekerjaan Baru</h1>
+                <h1 class="text-3xl font-bold text-gray-900 flex items-center gap-3">
+                    <i class="fa-solid fa-plus-circle text-orange-500"></i>
+                    Post Pekerjaan Baru
+                </h1>
                 <p class="text-gray-600 mt-2">Buat lowongan pekerjaan untuk menarik pekerja terbaik di Bogor</p>
             </div>
 
             <!-- Form -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+            <div class="rounded-xl shadow-sm border border-gray-100 metric-card">
                 <form method="POST" action="{{ route('employer.jobs.store') }}" class="p-8 space-y-6">
                     @csrf
 
                     @if ($errors->any())
-                        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                        <div class="bg-red-50 border-2 border-red-200 rounded-xl p-6 shadow-sm">
                             <div class="flex">
-                                <span class="text-red-400 mr-2">⚠️</span>
-                                <div>
-                                    <h3 class="text-sm font-medium text-red-800">Terjadi kesalahan:</h3>
-                                    <ul class="mt-2 text-sm text-red-700 list-disc list-inside">
+                                <div class="flex-shrink-0">
+                                    <i class="fa-solid fa-circle-exclamation text-red-500 text-xl"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <h3 class="text-sm font-semibold text-red-800 flex items-center gap-2">
+                                        Terjadi kesalahan:
+                                    </h3>
+                                    <ul class="mt-3 text-sm text-red-700 space-y-1">
                                         @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
+                                            <li class="flex items-start gap-2">
+                                                <i class="fa-solid fa-circle text-red-400 text-xs mt-1.5"></i>
+                                                {{ $error }}
+                                            </li>
                                         @endforeach
                                     </ul>
                                 </div>
@@ -42,8 +64,11 @@
                     @endif
 
                     <!-- Basic Information -->
-                    <div class="space-y-6">
-                        <h2 class="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2">Informasi Dasar</h2>
+                    <div class="bg-gray-50 rounded-xl p-6 space-y-6 border border-gray-200">
+                        <h2 class="text-xl font-semibold text-gray-800 flex items-center gap-2 pb-3 border-b border-gray-200">
+                            <i class="fa-solid fa-info-circle text-blue-600"></i>
+                            Informasi Dasar
+                        </h2>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="md:col-span-2">
@@ -56,7 +81,7 @@
                                     name="title" 
                                     required
                                     value="{{ old('title') }}"
-                                    class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                    class="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all shadow-sm"
                                     placeholder="Contoh: Desain Logo untuk Toko Online"
                                 >
                             </div>
@@ -69,7 +94,7 @@
                                     id="category_id" 
                                     name="category_id" 
                                     required
-                                    class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                    class="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all shadow-sm"
                                 >
                                     <option value="">Pilih Kategori</option>
                                     @foreach($categories as $category)
@@ -88,7 +113,7 @@
                                     id="job_type" 
                                     name="job_type" 
                                     required
-                                    class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                    class="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all shadow-sm"
                                 >
                                     <option value="">Pilih Tipe</option>
                                     <option value="freelance" {{ old('job_type') == 'freelance' ? 'selected' : '' }}>Freelance</option>
@@ -108,15 +133,18 @@
                                 name="description" 
                                 rows="6" 
                                 required
-                                class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                class="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all shadow-sm resize-none"
                                 placeholder="Jelaskan detail pekerjaan, apa yang dibutuhkan, dan ekspektasi hasil..."
                             >{{ old('description') }}</textarea>
                         </div>
                     </div>
 
                     <!-- Budget & Location -->
-                    <div class="space-y-6">
-                        <h2 class="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2">Budget & Lokasi</h2>
+                    <div class="bg-gray-50 rounded-xl p-6 space-y-6 border border-gray-200">
+                        <h2 class="text-xl font-semibold text-gray-800 flex items-center gap-2 pb-3 border-b border-gray-200">
+                            <i class="fa-solid fa-money-bill-wave text-orange-600"></i>
+                            Budget & Lokasi
+                        </h2>
                         
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div>
@@ -127,7 +155,7 @@
                                     id="budget_type" 
                                     name="budget_type" 
                                     required
-                                    class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                    class="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all shadow-sm"
                                 >
                                     <option value="negotiable" {{ old('budget_type') == 'negotiable' ? 'selected' : '' }}>Dapat Dinegosiasi</option>
                                     <option value="fixed" {{ old('budget_type') == 'fixed' ? 'selected' : '' }}>Harga Tetap</option>
@@ -145,7 +173,7 @@
                                     name="budget_min" 
                                     min="0"
                                     value="{{ old('budget_min') }}"
-                                    class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                    class="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all shadow-sm"
                                     placeholder="100000"
                                 >
                             </div>
@@ -160,7 +188,7 @@
                                     name="budget_max" 
                                     min="0"
                                     value="{{ old('budget_max') }}"
-                                    class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                    class="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all shadow-sm"
                                     placeholder="500000"
                                 >
                             </div>
@@ -177,7 +205,7 @@
                                     name="location" 
                                     required
                                     value="{{ old('location', 'Bogor') }}"
-                                    class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                    class="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all shadow-sm"
                                     placeholder="Bogor Tengah, Bogor"
                                 >
                             </div>
@@ -192,15 +220,18 @@
                                     name="deadline" 
                                     min="{{ date('Y-m-d', strtotime('+1 day')) }}"
                                     value="{{ old('deadline') }}"
-                                    class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                    class="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all shadow-sm"
                                 >
                             </div>
                         </div>
                     </div>
 
                     <!-- Requirements & Skills -->
-                    <div class="space-y-6">
-                        <h2 class="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2">Persyaratan & Keahlian</h2>
+                    <div class="bg-gray-50 rounded-xl p-6 space-y-6 border border-gray-200">
+                        <h2 class="text-xl font-semibold text-gray-800 flex items-center gap-2 pb-3 border-b border-gray-200">
+                            <i class="fa-solid fa-list-check text-blue-600"></i>
+                            Persyaratan & Keahlian
+                        </h2>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
@@ -211,7 +242,7 @@
                                     id="requirements" 
                                     name="requirements[]" 
                                     rows="4"
-                                    class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                    class="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all shadow-sm"
                                     placeholder="Contoh:&#10;- Pengalaman minimal 2 tahun&#10;- Portofolio yang relevan&#10;- Komunikasi yang baik"
                                 >{{ old('requirements.0') }}</textarea>
                                 <p class="text-sm text-gray-500 mt-1">Pisahkan setiap persyaratan dengan baris baru</p>
@@ -225,7 +256,7 @@
                                     id="skills_required" 
                                     name="skills_required[]" 
                                     rows="4"
-                                    class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                    class="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all shadow-sm"
                                     placeholder="Contoh:&#10;- Adobe Photoshop&#10;- Adobe Illustrator&#10;- Desain Logo"
                                 >{{ old('skills_required.0') }}</textarea>
                                 <p class="text-sm text-gray-500 mt-1">Pisahkan setiap keahlian dengan baris baru</p>
@@ -234,45 +265,56 @@
                     </div>
 
                     <!-- Additional Options -->
-                    <div class="space-y-6">
-                        <h2 class="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2">Opsi Tambahan</h2>
+                    <div class="bg-gray-50 rounded-xl p-6 space-y-6 border border-gray-200">
+                        <h2 class="text-xl font-semibold text-gray-800 flex items-center gap-2 pb-3 border-b border-gray-200">
+                            <i class="fa-solid fa-sliders text-orange-600"></i>
+                            Opsi Tambahan
+                        </h2>
                         
-                        <div class="flex items-center">
-                            <input 
-                                type="checkbox" 
-                                id="is_urgent" 
-                                name="is_urgent" 
-                                value="1"
-                                {{ old('is_urgent') ? 'checked' : '' }}
-                                class="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
-                            >
-                            <label for="is_urgent" class="ml-2 block text-sm text-gray-700">
-                                <span class="font-medium">Pekerjaan Mendesak</span>
-                                <span class="text-gray-500 block">Tandai jika pekerjaan ini perlu segera diselesaikan</span>
-                            </label>
+                        <div class="bg-white rounded-lg p-4 border border-gray-300 shadow-sm">
+                            <div class="flex items-start">
+                                <input 
+                                    type="checkbox" 
+                                    id="is_urgent" 
+                                    name="is_urgent" 
+                                    value="1"
+                                    {{ old('is_urgent') ? 'checked' : '' }}
+                                    class="h-5 w-5 text-orange-600 focus:ring-orange-500 border-gray-300 rounded mt-0.5"
+                                >
+                                <label for="is_urgent" class="ml-3 block text-sm">
+                                    <span class="font-semibold text-gray-900 flex items-center gap-2">
+                                        <i class="fa-solid fa-bolt text-orange-500"></i>
+                                        Pekerjaan Mendesak
+                                    </span>
+                                    <span class="text-gray-600 mt-1 block">Tandai jika pekerjaan ini perlu segera diselesaikan</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Submit Buttons -->
-                    <div class="flex items-center justify-between pt-6 border-t border-gray-200">
-                        <a href="{{ route('employer.dashboard') }}" class="text-gray-600 hover:text-gray-800 font-medium">
+                    <div class="flex flex-col sm:flex-row items-center justify-between pt-8 border-t-2 border-gray-200 gap-4">
+                        <a href="{{ route('employer.dashboard') }}" class="flex items-center gap-2 text-gray-600 hover:text-gray-800 font-medium transition-colors">
+                            <i class="fa-solid fa-arrow-left"></i>
                             Batal
                         </a>
-                        <div class="flex space-x-4">
+                        <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                             <button 
                                 type="submit" 
                                 name="status" 
                                 value="draft"
-                                class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                                class="flex items-center justify-center gap-2 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                             >
+                                <i class="fa-solid fa-save"></i>
                                 Simpan sebagai Draft
                             </button>
                             <button 
                                 type="submit" 
                                 name="status" 
-                                value="pending"
-                                class="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                                value="active"
+                                class="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                             >
+                                <i class="fa-solid fa-rocket"></i>
                                 Post Pekerjaan
                             </button>
                         </div>
