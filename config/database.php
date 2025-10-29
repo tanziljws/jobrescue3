@@ -2,6 +2,24 @@
 
 use Illuminate\Support\Str;
 
+// Derive default DB connection from DATABASE_URL scheme when DB_CONNECTION is not set
+$derivedDefaultConnection = null;
+$databaseUrl = env('DATABASE_URL');
+if ($databaseUrl) {
+    $scheme = parse_url($databaseUrl, PHP_URL_SCHEME);
+    if ($scheme) {
+        $scheme = strtolower($scheme);
+        $derivedDefaultConnection = match ($scheme) {
+            'postgres', 'postgresql' => 'pgsql',
+            'mysql' => 'mysql',
+            'mariadb' => 'mariadb',
+            'sqlsrv', 'mssql' => 'sqlsrv',
+            'sqlite' => 'sqlite',
+            default => null,
+        };
+    }
+}
+
 return [
 
     /*
@@ -16,7 +34,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', $derivedDefaultConnection ?: 'mysql'),
 
     /*
     |--------------------------------------------------------------------------
