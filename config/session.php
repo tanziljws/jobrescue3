@@ -2,6 +2,12 @@
 
 use Illuminate\Support\Str;
 
+// Sanitize quoted env values for session driver
+$__sessionDriver = env('SESSION_DRIVER', 'file');
+if (is_string($__sessionDriver)) {
+    $__sessionDriver = trim($__sessionDriver, "\"' ");
+}
+
 return [
 
     /*
@@ -18,7 +24,7 @@ return [
     |
     */
 
-    'driver' => env('SESSION_DRIVER', 'file'),
+    'driver' => $__sessionDriver,
 
     /*
     |--------------------------------------------------------------------------
