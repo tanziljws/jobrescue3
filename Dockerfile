@@ -32,15 +32,9 @@ RUN composer install --optimize-autoloader --no-dev --no-scripts --no-interactio
 RUN npm install
 RUN npm run build
 
-# Generate application key
-RUN php artisan key:generate --force
-
-# Create SQLite database
-RUN touch /app/database/database.sqlite
-
 # Set permissions
-RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache /app/database
-RUN chmod -R 775 /app/storage /app/bootstrap/cache /app/database
+RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
+RUN chmod -R 775 /app/storage /app/bootstrap/cache
 
 # Expose port
 EXPOSE 8000
