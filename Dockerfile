@@ -60,5 +60,6 @@ RUN chmod -R 775 /app/storage /app/bootstrap/cache
 # Expose port
 EXPOSE 8000
 
-# Start server (migrations should be run manually via console)
-CMD php artisan optimize:clear && php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
+# Start server (supports SQLite POC mode)
+# If USE_SQLITE_FOR_POC=true, ensure DB file exists (default /data/database.sqlite)
+CMD sh -lc 'if [ "${USE_SQLITE_FOR_POC}" = "true" ]; then mkdir -p /data && : > ${DB_DATABASE:-/data/database.sqlite}; fi; php artisan optimize:clear && php artisan serve --host=0.0.0.0 --port=${PORT:-8000}'

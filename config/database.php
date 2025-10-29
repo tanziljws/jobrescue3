@@ -36,6 +36,9 @@ if (is_string($explicitConnection)) {
     $explicitConnection = trim($explicitConnection, "\"' ");
 }
 
+// Allow forcing SQLite for quick POC deployments
+$forceSqliteForPoc = filter_var(env('USE_SQLITE_FOR_POC', false), FILTER_VALIDATE_BOOL);
+
 return [
 
     /*
@@ -50,7 +53,7 @@ return [
     |
     */
 
-    'default' => ($explicitConnection ?: ($derivedDefaultConnection ?: 'mysql')),
+    'default' => ($forceSqliteForPoc ? 'sqlite' : ($explicitConnection ?: ($derivedDefaultConnection ?: 'mysql'))),
 
     /*
     |--------------------------------------------------------------------------
@@ -68,6 +71,7 @@ return [
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DATABASE_URL'),
+            // For POC on Railway, use a mounted volume path like /data/database.sqlite
             'database' => env('DB_DATABASE', database_path('database.sqlite')),
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
