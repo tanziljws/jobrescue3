@@ -4,7 +4,7 @@ use Illuminate\Support\Str;
 
 // Derive default DB connection from DATABASE_URL scheme when DB_CONNECTION is not set
 $derivedDefaultConnection = null;
-$databaseUrl = env('DATABASE_URL');
+$databaseUrl = env('DATABASE_URL') ?: env('DB_URL');
 if ($databaseUrl) {
     $scheme = parse_url($databaseUrl, PHP_URL_SCHEME);
     if ($scheme) {
@@ -17,6 +17,14 @@ if ($databaseUrl) {
             'sqlite' => 'sqlite',
             default => null,
         };
+    }
+}
+// Fallback heuristics if no URL provided
+if ($derivedDefaultConnection === null) {
+    if (env('PGHOST')) {
+        $derivedDefaultConnection = 'pgsql';
+    } elseif (env('MYSQLHOST')) {
+        $derivedDefaultConnection = 'mysql';
     }
 }
 
