@@ -7,16 +7,37 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
+    libzip-dev \
+    libicu-dev \
+    libsqlite3-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libwebp-dev \
     zip \
     unzip \
     nodejs \
-    npm
-
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+    npm \
+    libpq-dev \
+    libmagickwand-dev \
+    --no-install-recommends \
+    && rm -r /var/lib/apt/lists/*
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql pdo_sqlite mbstring exif pcntl bcmath gd
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-install -j$(nproc) \
+        pdo_mysql \
+        pdo_sqlite \
+        mbstring \
+        exif \
+        pcntl \
+        bcmath \
+        gd \
+        intl \
+        zip \
+        pdo_pgsql \
+        opcache \
+    && pecl install imagick \
+    && docker-php-ext-enable imagick
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
