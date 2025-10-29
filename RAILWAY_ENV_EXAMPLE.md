@@ -115,7 +115,7 @@ LOG_LEVEL="debug"
 DB_CONNECTION="pgsql"
 
 # Pakai DATABASE_URL (Format Railway - PASTIKAN pakai "postgresql://")
-DATABASE_URL="postgresql://postgres:AQBAWVQXZFxwgssCksLcOlKicSvAxniO@nozomi.proxy.rlwy.net:55832/railway"
+DATABASE_URL="postgresql://postgres:ybImNzzhBrkEQLeHscWVpNWlRBgGujuQ@caboose.proxy.rlwy.net:14497/railway"
 
 # Catatan: Formatnya adalah:
 # postgresql://[USERNAME]:[PASSWORD]@[HOST]:[PORT]/[DATABASE]
