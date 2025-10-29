@@ -60,5 +60,5 @@ RUN chmod -R 775 /app/storage /app/bootstrap/cache
 # Expose port
 EXPOSE 8000
 
-# Run migrations and start server
-CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
+# Start server (migrations should be run manually via console)
+CMD php artisan optimize:clear && php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
