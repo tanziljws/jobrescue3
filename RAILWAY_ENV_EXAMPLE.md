@@ -106,33 +106,46 @@ LOG_LEVEL="debug"
 
 ---
 
-## Pakai PostgreSQL di Railway
+## Pakai PostgreSQL di Railway ✅
 
-Jika Anda ingin beralih ke PostgreSQL di Railway, gunakan variabel berikut (sesuaikan dengan kredensial dari service PostgreSQL Railway Anda):
+**Format DATABASE_URL yang BENAR untuk PostgreSQL di Railway:**
 
 ```env
 # Ganti koneksi ke Postgres
 DB_CONNECTION="pgsql"
 
-# Opsi 1: Pakai DATABASE_URL (direkomendasikan)
-DATABASE_URL="postgres://<USER>:<PASSWORD>@<HOST>:<PORT>/<DATABASE>"
+# Pakai DATABASE_URL (Format Railway - PASTIKAN pakai "postgresql://")
+DATABASE_URL="postgresql://postgres:AQBAWVQXZFxwgssCksLcOlKicSvAxniO@nozomi.proxy.rlwy.net:55832/railway"
 
-# Opsi 2: Pakai variabel terpisah (Railway biasanya menyediakan PG*)
+# Catatan: Formatnya adalah:
+# postgresql://[USERNAME]:[PASSWORD]@[HOST]:[PORT]/[DATABASE]
+# JANGAN pakai "postgres://" tapi "postgresql://"
+
+# Session tetap pakai database (tabel sessions sudah ada di migration)
+SESSION_DRIVER="database"
+```
+
+**Atau jika Railway auto-inject PGHOST, PGPORT, dll:**
+
+```env
+DB_CONNECTION="pgsql"
 DB_HOST="${PGHOST}"
 DB_PORT="${PGPORT}"
 DB_DATABASE="${PGDATABASE}"
 DB_USERNAME="${PGUSER}"
 DB_PASSWORD="${PGPASSWORD}"
-
-# Sesi sementara pakai file agar halaman cepat up (opsional)
-SESSION_DRIVER="file"
 ```
 
-Langkah migrasi:
-- Setelah mengubah env, jalankan: `php artisan migrate --force`
-- Jika sebelumnya pakai MySQL dump, abaikan dump tersebut. Gunakan migrations bawaan Laravel proyek ini.
+**Langkah Setup:**
+1. ✅ Tambahkan PostgreSQL service di Railway Dashboard
+2. ✅ Copy `DATABASE_URL` dari Railway PostgreSQL service
+3. ✅ Set `DB_CONNECTION="pgsql"` dan `DATABASE_URL` di environment variables
+4. ✅ Redeploy aplikasi
+5. ✅ Jalankan migrations: `php artisan migrate --force` (via Railway console atau deploy command)
 
-Catatan kompatibilitas:
-- Schema menggunakan tipe Laravel (enum, json, decimal, foreignId) sehingga kompatibel dengan PostgreSQL
-- Tidak ada penggunaan `json_valid` MySQL-only dalam migrations; aman untuk Postgres
+**Catatan Penting:**
+- ✅ Config `database.php` sudah support `DATABASE_URL` untuk PostgreSQL
+- ✅ Schema migrations kompatibel dengan PostgreSQL (pakai Laravel types: enum, json, decimal, foreignId)
+- ✅ Tidak ada MySQL-specific syntax di migrations
+- ⚠️ Format harus `postgresql://` bukan `postgres://` untuk Railway
 
