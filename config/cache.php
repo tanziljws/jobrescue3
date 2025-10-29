@@ -15,7 +15,8 @@ return [
     |
     */
 
-    'default' => env('CACHE_STORE', 'database'),
+    // Default to file to avoid DB dependency during boot/clear cache
+    'default' => env('CACHE_STORE', 'file'),
 
     /*
     |--------------------------------------------------------------------------
